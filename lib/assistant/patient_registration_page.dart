@@ -24,7 +24,9 @@ class PatientRegistrationPage extends StatelessWidget {
             )),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/personal-info');
+              },
               style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF3E1F99)),
               child: const Text('Register'),
             ),

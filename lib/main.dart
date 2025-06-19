@@ -12,6 +12,21 @@ import 'assistant/patient_profile_page.dart';
 import 'assistant/patient_registration_page.dart';
 import 'assistant/patient_assessment_page.dart';
 import 'assistant/session_time_page.dart';
+import 'patient/patient_dashboard.dart';
+import 'patient/symptom_tracker.dart';
+import 'patient/call_for_help.dart';
+import 'patient/health_history.dart';
+import 'patient/learning_page.dart';
+import 'patient/chatbot_page.dart';
+import 'assistant/personal_info_page.dart';
+import 'admin/admin_dashboard_page.dart';
+import 'admin_login.dart';
+import 'admin/visit_trend_page.dart';
+import 'admin/team_heatmap_page.dart';
+import 'admin/resources_page.dart';
+import 'admin/high_risk_page.dart';
+import 'admin/morphine_stock_page.dart';
+import 'admin/referrals_page.dart';
 
 void main() => runApp(const KarunaDarpanApp());
 
@@ -39,6 +54,21 @@ class KarunaDarpanApp extends StatelessWidget {
         '/patient-registration': (context) => const PatientRegistrationPage(),
         '/patient-assessment': (context) => const PatientAssessmentPage(),
         '/session-time': (context) => const SessionTimePage(),
+        '/patient-dashboard': (context) => const PatientDashboard(),
+        '/symptom-tracker': (context) => const SymptomTrackerPage(),
+        '/call-for-help': (context) => const CallForHelpPage(),
+        '/health-history': (context) => const HealthHistoryPage(),
+        '/patient-learning': (context) => const PatientLearningPage(),
+        '/chatbot': (context) => const ChatbotPage(),
+        '/personal-info': (context) => const PersonalInfoPage(),
+        '/admin-dashboard': (context) => const AdminDashboardMainPage(),
+        '/admin-login-page': (context) => const AdminLoginPage(),
+        '/visit-trends': (context) => const VisitTrendsPage(),
+        '/team-heatmap': (context) => const TeamHeatmapPage(),
+        '/resources': (context) => const ResourcesPage(),
+        '/high-risk': (context) => const HighRiskPage(),
+        '/morphine-stock': (context) => const MorphineStockPage(),
+        '/referrals': (context) => const ReferralsPage(),
       },
     );
   }

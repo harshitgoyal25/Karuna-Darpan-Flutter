@@ -8,7 +8,7 @@ class PatientsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Patients'),
-        backgroundColor: Color(0xFF3E1F99),
+        backgroundColor: Color.fromARGB(255, 137, 98, 255),
         leading: const BackButton(),
       ),
       body: Column(

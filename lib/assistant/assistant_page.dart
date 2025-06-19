@@ -8,7 +8,7 @@ class AssistantPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF3E1F99),
+        backgroundColor: const Color.fromARGB(255, 92, 52, 213),
         title: const Text("Karuna Saathi"),
         centerTitle: true,
       ),
