@@ -6,11 +6,16 @@ class AdminDashboardMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-         title: const Text('Admin Dashboard',style: TextStyle(color: Colors.white),),
-        backgroundColor: Color(0xFF3E1F99),
-        leading: const BackButton(color: Colors.white,),
+        elevation: 0,
+        title: const Text(
+          'Admin Dashboard',
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF3E1F99),
+        leading: const BackButton(color: Colors.white),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -27,14 +32,15 @@ class AdminDashboardMainPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           GestureDetector(
-  onTap: () => Navigator.pushNamed(context, '/high-risk'),
-  child: _alertBox(Icons.cancel, '4 High-Risk Patient today', Colors.orange),
-),
-GestureDetector(
-  onTap: () => Navigator.pushNamed(context, '/morphine-stock'),
-  child: _alertBox(Icons.warning_amber, 'Morphine stock low', Colors.amber),
-),
-
+            onTap: () => Navigator.pushNamed(context, '/high-risk'),
+            child: _alertBox(
+                Icons.cancel, '4 High-Risk Patients today', Colors.orange),
+          ),
+          GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/morphine-stock'),
+            child: _alertBox(
+                Icons.warning_amber, 'Morphine stock low', Colors.amber),
+          ),
           const SizedBox(height: 16),
           _buttonRow(context, [
             ['View Visit Trends', Icons.trending_up, '/visit-trends'],
@@ -47,13 +53,17 @@ GestureDetector(
           ]),
           const SizedBox(height: 20),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              // export report
+            },
             icon: const Icon(Icons.open_in_new, color: Colors.white),
-            label: const Text('Export Report', style: TextStyle(color: Colors.white)),
+            label: const Text('Export Report',
+                style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
               padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
             ),
           ),
         ],
@@ -73,8 +83,10 @@ GestureDetector(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label, style: const TextStyle(fontSize: 16)),
-            Icon(icon),
+            Text(label,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            Icon(icon, color: Colors.grey[600]),
           ],
         ),
       ),
@@ -83,7 +95,7 @@ GestureDetector(
 
   Widget _alertBox(IconData icon, String message, Color iconColor) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
+      margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -93,7 +105,7 @@ GestureDetector(
         children: [
           Icon(icon, color: iconColor),
           const SizedBox(width: 12),
-          Expanded(child: Text(message)),
+          Expanded(child: Text(message, style: const TextStyle(fontSize: 14))),
         ],
       ),
     );
@@ -102,11 +114,13 @@ GestureDetector(
   Widget _buttonRow(BuildContext context, List<List<dynamic>> buttons) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: buttons.map((b) => _navButton(context, b[0], b[1], b[2])).toList(),
+      children:
+          buttons.map((b) => _navButton(context, b[0], b[1], b[2])).toList(),
     );
   }
 
-  Widget _navButton(BuildContext context, String label, IconData icon, String route) {
+  Widget _navButton(
+      BuildContext context, String label, IconData icon, String route) {
     return Expanded(
       child: InkWell(
         onTap: () => Navigator.pushNamed(context, route),
@@ -121,7 +135,7 @@ GestureDetector(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, size: 28),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Text(label, textAlign: TextAlign.center),
             ],
           ),
@@ -148,7 +162,9 @@ class _StatCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(value,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
             Text(label, textAlign: TextAlign.center),
           ],

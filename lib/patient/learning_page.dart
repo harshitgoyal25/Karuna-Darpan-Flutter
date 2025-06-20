@@ -5,15 +5,40 @@ class PatientLearningPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final options = [
+      {'title': 'FAQs', 'route': null},
+      {'title': 'Chatbot', 'route': '/chatbot'},
+      {'title': 'Videos', 'route': null},
+    ];
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
-      appBar: AppBar(title: const Text('Learning'), backgroundColor: const Color(0xFF6A3BFF)),
-      body: Column(
-        children: [
-          ListTile(title: const Text('FAQs'), onTap: () {}),
-          ListTile(title: const Text('Chatbot'), onTap: () => Navigator.pushNamed(context, '/chatbot')),
-          ListTile(title: const Text('Videos'), onTap: () {}),
-        ],
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Learning', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF3E1F99),
+        leading: const BackButton(color: Colors.white),
+        elevation: 0,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: options.length,
+        itemBuilder: (context, index) {
+          final option = options[index];
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            elevation: 2,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: ListTile(
+              title: Text(option['title']!, style: const TextStyle(fontSize: 16)),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                if (option['route'] != null) {
+                  Navigator.pushNamed(context, option['route']!);
+                }
+              },
+            ),
+          );
+        },
       ),
     );
   }

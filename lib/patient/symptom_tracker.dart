@@ -10,47 +10,79 @@ class SymptomTrackerPage extends StatelessWidget {
     final TextEditingController historyController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Symptom Tracker'),
-        backgroundColor: const Color(0xFF6A3BFF),
+        title: const Text('Symptom Tracker',
+            style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF3E1F99),
+        leading: const BackButton(color: Colors.white),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('What symptoms are you experiencing?'),
+            const SizedBox(height: 6),
             TextField(
               controller: symptomsController,
-              decoration: const InputDecoration(hintText: 'Headache, Fever, etc.'),
+              decoration: InputDecoration(
+                hintText: 'Headache, Fever, etc.',
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
             ),
             const SizedBox(height: 16),
             const Text('How long have you had these symptoms?'),
+            const SizedBox(height: 6),
             TextField(
               controller: durationController,
-              decoration: const InputDecoration(hintText: '2 days'),
+              decoration: InputDecoration(
+                hintText: '2 days',
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
             ),
             const SizedBox(height: 16),
             const Text('Any medical history?'),
+            const SizedBox(height: 6),
             TextField(
               controller: historyController,
-              decoration: const InputDecoration(hintText: 'Asthma, Diabetes'),
+              decoration: InputDecoration(
+                hintText: 'Asthma, Diabetes',
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SymptomResultsPage(
-                      symptoms: symptomsController.text,
-                      duration: durationController.text,
-                      history: historyController.text,
+            const SizedBox(height: 24),
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF3E1F99),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SymptomResultsPage(
+                        symptoms: symptomsController.text,
+                        duration: durationController.text,
+                        history: historyController.text,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: const Text('Get Results'),
+                  );
+                },
+                child: const Text('Get Results',
+                    style: TextStyle(color: Colors.white)),
+              ),
             ),
           ],
         ),
@@ -74,13 +106,14 @@ class SymptomResultsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Results'),
-        backgroundColor: const Color(0xFF6A3BFF),
+        title: const Text('Results', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF3E1F99),
+        leading: const BackButton(color: Colors.white),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -89,9 +122,9 @@ class SymptomResultsPage extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 12),
-            Text('Symptoms: $symptoms'),
-            Text('Duration: $duration'),
-            Text('History: $history'),
+            Text('📝 Symptoms: $symptoms'),
+            Text('⏱️ Duration: $duration'),
+            Text('📋 History: $history'),
             const SizedBox(height: 24),
             const Text(
               'Possible Causes:',
@@ -101,11 +134,13 @@ class SymptomResultsPage extends StatelessWidget {
             const Text('- Common Cold'),
             const Text('- Viral Fever'),
             const Text('- Flu or Infection'),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Back'),
-            )
+            const SizedBox(height: 24),
+            Center(
+              child: OutlinedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Back'),
+              ),
+            ),
           ],
         ),
       ),

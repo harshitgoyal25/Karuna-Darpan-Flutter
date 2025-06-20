@@ -22,120 +22,87 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Center(
             child: Container(
-              width: 300,
-              padding: const EdgeInsets.symmetric(vertical: 40),
+              width: 320,
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const CircleAvatar(
                     radius: 40,
-                    backgroundColor: Colors.grey,
-                    child: Text("logo", style: TextStyle(color: Colors.white)),
+                    backgroundColor: Colors.white24,
+                    child: Icon(Icons.lock_open, color: Colors.white, size: 40),
                   ),
-                  const SizedBox(height: 30),
-                  const Text("LOGIN",
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "LOGIN",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
                   const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: DropdownButtonFormField<String>(
-                      value: selectedRole,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      items: roles
-                          .map((role) => DropdownMenuItem(
-                                value: role,
-                                child: Text(role),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() => selectedRole = value);
-                        }
-                      },
-                    ),
-                  ),
+                  _buildDropdown(),
                   const SizedBox(height: 16),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextField(
-                      controller: usernameController,
-                      decoration: const InputDecoration(
-                          hintText: "Username", border: InputBorder.none),
-                    ),
-                  ),
+                  _buildTextField("Username", usernameController, false),
                   const SizedBox(height: 16),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30)),
-                    child: TextField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                          hintText: "Password", border: InputBorder.none),
-                    ),
-                  ),
+                  _buildTextField("Password", passwordController, true),
                   const SizedBox(height: 10),
-                  const Text("forgot password",
-                      style: TextStyle(color: Colors.white, fontSize: 12)),
-                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/forget-password'),
+                      child: const Text(
+                        "Forgot password?",
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: () {
-                      if (selectedRole == 'Assistant' ||
-                          selectedRole == 'Therapist') {
-                        Navigator.pushNamed(context, '/assistant');
-                      } else if (selectedRole == 'Patient') {
-                        Navigator.pushNamed(context, '/patient-dashboard');
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content:
-                                  Text('Redirect not set for $selectedRole')),
-                        );
-                      }
-                    },
+                    onPressed: _handleLogin,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: const Color(0xFF3E1F99),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 12),
                     ),
-                    child: const Text("Login",
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  const Text("Don’t Have an Account? Register",
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/create-account'),
+                    child: const Text(
+                      "Don't have an account? Register",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14)),
+                          color: Colors.white70,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-          // Admin Login Button
           Positioned(
             top: 40,
             right: 20,
@@ -145,17 +112,76 @@ class _LoginPageState extends State<LoginPage> {
               icon: const Icon(Icons.admin_panel_settings, size: 16),
               label: const Text("Admin", style: TextStyle(fontSize: 12)),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black87,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildTextField(
+      String hint, TextEditingController controller, bool obscure) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        controller: controller,
+        obscureText: obscure,
+        decoration: InputDecoration(
+          hintText: hint,
+          border: InputBorder.none,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdown() {
+    return DropdownButtonFormField<String>(
+      value: selectedRole,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      items: roles.map((role) {
+        return DropdownMenuItem(
+          value: role,
+          child: Text(role),
+        );
+      }).toList(),
+      onChanged: (value) {
+        if (value != null) {
+          setState(() => selectedRole = value);
+        }
+      },
+    );
+  }
+
+  void _handleLogin() {
+    if (selectedRole == 'Assistant' || selectedRole == 'Therapist') {
+      Navigator.pushNamed(context, '/assistant');
+    } else if (selectedRole == 'Patient') {
+      Navigator.pushNamed(context, '/patient-dashboard');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Redirect not set for $selectedRole')),
+      );
+    }
   }
 }

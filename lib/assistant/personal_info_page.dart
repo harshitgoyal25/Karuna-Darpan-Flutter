@@ -22,12 +22,16 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Personal Information'),
+        title: const Text(
+          'Personal Information',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: const Color(0xFF3E1F99),
-        leading: const BackButton(),
+        leading: const BackButton(color: Colors.white),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,44 +41,36 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                 keyboardType: TextInputType.number),
             _buildTextField('Mobile Number', mobileController,
                 keyboardType: TextInputType.phone),
-            _buildTextField('Email id', emailController,
+            _buildTextField('Email ID', emailController,
                 keyboardType: TextInputType.emailAddress),
-            const SizedBox(height: 10),
-            const Text('Gender'),
-            DropdownButton<String>(
+            const SizedBox(height: 20),
+            const Text('Gender', style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 6),
+            _buildDropdown(
               value: gender,
-              isExpanded: true,
-              items: ['Male', 'Female', 'Other']
-                  .map((value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
-                      ))
-                  .toList(),
-              onChanged: (value) => setState(() => gender = value!),
-            ),
-            const SizedBox(height: 10),
-            const Text('Education'),
-            DropdownButton<String>(
-              value: education,
-              isExpanded: true,
-              items: ['Graduate', 'Postgraduate', 'Diploma']
-                  .map((value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
-                      ))
-                  .toList(),
-              onChanged: (value) => setState(() => education = value!),
+              items: ['Male', 'Female', 'Other'],
+              onChanged: (val) => setState(() => gender = val),
             ),
             const SizedBox(height: 20),
-            Center(
+            const Text('Education',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 6),
+            _buildDropdown(
+              value: education,
+              items: ['Graduate', 'Postgraduate', 'Diploma'],
+              onChanged: (val) => setState(() => education = val),
+            ),
+            const SizedBox(height: 30),
+            SizedBox(
+              width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF3E1F99),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
                 onPressed: () {
-                  // You can save or process data here
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Patient Registered')),
                   );
@@ -82,7 +78,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                 child: const Text('Register',
                     style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -92,15 +88,32 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   Widget _buildTextField(String label, TextEditingController controller,
       {TextInputType keyboardType = TextInputType.text}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 16),
       child: TextField(
         controller: controller,
         keyboardType: keyboardType,
         decoration: InputDecoration(
           labelText: label,
-          border: const OutlineInputBorder(),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required String value,
+    required List<String> items,
+    required Function(String) onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      isExpanded: true,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      items:
+          items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+      onChanged: (val) => onChanged(val!),
     );
   }
 }

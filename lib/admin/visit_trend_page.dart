@@ -7,37 +7,22 @@ class VisitTrendsPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: const Color(0xFF3E1F99),
         appBar: AppBar(
+          elevation: 0,
+          backgroundColor: const Color(0xFF3E1F99),
+          leading: const BackButton(color: Colors.white),
           title: const Text(
             'Visit Trend',
-            style: TextStyle(color: Colors.white),
-            
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          automaticallyImplyLeading: false,
-          backgroundColor: Color(0xFF3E1F99),
-          leading: const BackButton(),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: 16),
+            ),
+          ],
         ),
         body: Column(
           children: [
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Icon(Icons.menu, color: Colors.white),
-                ),
-                Text('C H C Name',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/avatar.png')),
-                ),
-              ],
-            ),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -51,7 +36,8 @@ class VisitTrendsPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
-                    Text('View Visit Trends'),
+                    Text('View Visit Trends',
+                        style: TextStyle(fontWeight: FontWeight.w600)),
                     Icon(Icons.chevron_right),
                   ],
                 ),
@@ -70,9 +56,11 @@ class VisitTrendsPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text('Last Six Months',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Last Six Months',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 16),
                     Expanded(
                       child: Container(
@@ -100,16 +88,14 @@ class VisitTrendsPage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: const Color(0xFF3E1F99),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                            borderRadius: BorderRadius.circular(20)),
                       ),
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                        child: Text('Visit Trends'),
-                      ),
+                      child: const Text('Visit Trends',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

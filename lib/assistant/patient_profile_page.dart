@@ -6,56 +6,58 @@ class PatientProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Patient Profile'),
-        backgroundColor: Color(0xFF3E1F99),
-        leading: const BackButton(),
+        title: const Text('Patient Profile',style: TextStyle(color: Colors.white),),
+        backgroundColor: const Color(0xFF3E1F99),
+        leading: const BackButton(color: Colors.white),
+        elevation: 0,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         children: [
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Text('Aarjoo Dahiya Age - 21 Gender - Female', style: TextStyle(fontSize: 16)),
+          const Text(
+            'Aarjoo Dahiya\nAge: 21  |  Gender: Female',
+            style: TextStyle(fontSize: 16),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/session-time'),
-              style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF3E1F99)),
-              child: const Text('Please verify location'),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, '/session-time'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF3E1F99),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
             ),
+            child: const Text('Please verify location'),
           ),
-          const Divider(height: 30),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text('Add Complications', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Divider(height: 40),
+          const Text(
+            'Add Complications',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Severity/Grade'),
-                Text('Date of Onset'),
-                Text('Clinical Notes'),
-              ],
-            ),
+          const SizedBox(height: 8),
+          const Text('• Severity/Grade'),
+          const Text('• Date of Onset'),
+          const Text('• Clinical Notes'),
+          const Divider(height: 40),
+          const Text(
+            'Do you want the assistant to measure vitals?',
+            style: TextStyle(fontSize: 15),
           ),
-          const Divider(height: 30),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text('Do you want the assistant to measure vitals?'),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                OutlinedButton(onPressed: () {}, child: Text('Yes')),
-                SizedBox(width: 16),
-                OutlinedButton(onPressed: () {}, child: Text('No')),
-              ],
-            ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              OutlinedButton(
+                onPressed: () {},
+                child: const Text('Yes'),
+              ),
+              const SizedBox(width: 16),
+              OutlinedButton(
+                onPressed: () {},
+                child: const Text('No'),
+              ),
+            ],
           ),
         ],
       ),

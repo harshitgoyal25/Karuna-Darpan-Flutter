@@ -5,16 +5,49 @@ class CallForHelpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final options = ['K SAATHI', 'AMBULANCE', 'TELE MANAS'];
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
-      appBar: AppBar(title: const Text('Call For Help'), backgroundColor: const Color(0xFF6A3BFF)),
-      body: Column(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text(
+          'Call For Help',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF3E1F99),
+        leading: const BackButton(color: Colors.white),
+        elevation: 0,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         children: [
-          ListTile(title: const Text('K SAATHI'), onTap: () {}),
-          ListTile(title: const Text('AMBULANCE'), onTap: () {}),
-          ListTile(title: const Text('TELE MANAS'), onTap: () {}),
-          const SizedBox(height: 12),
-          ElevatedButton(onPressed: () {}, style: ElevatedButton.styleFrom(backgroundColor: Colors.red), child: const Text('EMERGENCY')),
+          ...options.map((title) => Card(
+                elevation: 2,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14)),
+                child: ListTile(
+                  title: Text(title, style: const TextStyle(fontSize: 16)),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    // Handle help option tap
+                  },
+                ),
+              )),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () {
+              // Handle emergency tap
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text('EMERGENCY',
+                style: TextStyle(fontSize: 16, color: Colors.white)),
+          ),
         ],
       ),
     );

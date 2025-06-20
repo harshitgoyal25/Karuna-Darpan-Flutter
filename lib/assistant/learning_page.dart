@@ -8,24 +8,42 @@ class LearningPage extends StatelessWidget {
     final sections = ['ChatBot', 'F&Qs', 'Articles', 'Videos'];
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Learning'),
+        title: const Text(
+          'Learning',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: const Color(0xFF3E1F99),
-        leading: BackButton(onPressed: () => Navigator.pop(context)),
+        leading: const BackButton(color: Colors.white),
+        elevation: 0,
       ),
-      body: Column(
-        children: sections
-            .map((section) => Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Container(
-                    color: Colors.grey.shade200,
-                    padding: const EdgeInsets.all(20),
-                    width: double.infinity,
-                    child: Text(section,
-                        style: const TextStyle(fontSize: 16)),
-                  ),
-                ))
-            .toList(),
+      body: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        itemCount: sections.length,
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 2,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            child: ListTile(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              leading:
+                  const Icon(Icons.school_outlined, color: Color(0xFF3E1F99)),
+              title: Text(
+                sections[index],
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              ),
+              trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+              onTap: () {
+                // TODO: Navigate to detailed learning content
+              },
+            ),
+          );
+        },
       ),
     );
   }

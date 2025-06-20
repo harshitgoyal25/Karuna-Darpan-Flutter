@@ -27,6 +27,10 @@ import 'admin/resources_page.dart';
 import 'admin/high_risk_page.dart';
 import 'admin/morphine_stock_page.dart';
 import 'admin/referrals_page.dart';
+import 'forget_password_page.dart'; // Adjust path if needed
+import 'create_account_page.dart';
+
+import 'assistant/add_task_page.dart';
 
 void main() => runApp(const KarunaDarpanApp());
 
@@ -69,6 +73,10 @@ class KarunaDarpanApp extends StatelessWidget {
         '/high-risk': (context) => const HighRiskPage(),
         '/morphine-stock': (context) => const MorphineStockPage(),
         '/referrals': (context) => const ReferralsPage(),
+        '/add-task': (context) => const AddTaskPage(),
+        '/forget-password': (context) => const ForgetPasswordPage(),
+        '/create-account': (context) => const CreateAccountPage(),
+
       },
     );
   }

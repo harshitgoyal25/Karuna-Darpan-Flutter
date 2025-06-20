@@ -5,33 +5,58 @@ class PatientDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> buttons = [
+      {'title': 'Health History', 'route': '/health-history'},
+      {'title': 'Symptom Tracker', 'route': '/symptom-tracker'},
+      {'title': 'Call For Help', 'route': '/call-for-help'},
+      {'title': 'Learning', 'route': '/patient-learning'},
+    ];
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
-      body: Column(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Patient Dashboard',
+            style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF3E1F99),
+        elevation: 0,
+        centerTitle: true,
+        leading: const BackButton(color: Colors.white),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
         children: [
           Container(
-            height: 140,
-            width: double.infinity,
-            color: const Color(0xFF6A3BFF),
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsets.only(bottom: 12),
-            child: const Text('Patient Name',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            padding: const EdgeInsets.all(24),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0xFF6A3BFF),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Text(
+              'Patient Name',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            ),
           ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/health-history'),
-              child: const Text('Health History')),
-          ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/symptom-tracker'),
-              child: const Text('Symptom Tracker')),
-          ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/call-for-help'),
-              child: const Text('Call For Help')),
-          ElevatedButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, '/patient-learning'),
-              child: const Text('Learning')),
+          const SizedBox(height: 24),
+          ...buttons.map((btn) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, btn['route']),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                    backgroundColor: Colors.grey.shade200,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child:
+                      Text(btn['title'], style: const TextStyle(fontSize: 16)),
+                ),
+              )),
         ],
       ),
     );

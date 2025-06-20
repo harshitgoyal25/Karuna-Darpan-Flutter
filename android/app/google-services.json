@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "887234957769",
+    "project_id": "karuna-darpan",
+    "storage_bucket": "karuna-darpan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887234957769:android:a07379852caf1a7f3c5818",
+        "android_client_info": {
+          "package_name": "com.example.karuna_darpan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCulUCArRhvPnv_mqXDv5Ve23N1_dqfdOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
