@@ -29,7 +29,9 @@ import 'admin/morphine_stock_page.dart';
 import 'admin/referrals_page.dart';
 import 'forget_password_page.dart'; // Adjust path if needed
 import 'create_account_page.dart';
-
+import 'splash_screen.dart';
+import 'confirmation_splash_page.dart';
+import 'patient_health_info_page.dart';
 import 'assistant/add_task_page.dart';
 
 void main() => runApp(const KarunaDarpanApp());
@@ -43,13 +45,17 @@ class KarunaDarpanApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Karuna Darpan',
       theme: ThemeData(fontFamily: 'Roboto'),
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
+        '/splash': (context) => const SplashScreen(),
         '/': (context) => const LoginPage(),
         '/assistant': (context) => const AssistantPage(),
         '/patients': (context) => const PatientsPage(),
         '/tasks': (context) => const TasksPage(),
+        '/confirmation-splash': (context) => const ConfirmationSplashPage(),
+
         '/calls': (context) => const CallsPage(),
+        '/patient-health-info': (context) => const PatientHealthInfoPage(),
         '/learning': (context) => const LearningPage(),
         '/performance': (context) => const PerformancePage(),
         '/patient-list': (context) => const PatientListPage(),
@@ -76,7 +82,6 @@ class KarunaDarpanApp extends StatelessWidget {
         '/add-task': (context) => const AddTaskPage(),
         '/forget-password': (context) => const ForgetPasswordPage(),
         '/create-account': (context) => const CreateAccountPage(),
-
       },
     );
   }

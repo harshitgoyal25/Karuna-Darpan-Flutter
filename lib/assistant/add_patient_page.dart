@@ -23,7 +23,6 @@ class AddPatientPage extends StatelessWidget {
             _buildButton(
                 context, 'Patient Registration', '/patient-registration'),
             const SizedBox(height: 16),
-            _buildButton(context, 'Patient Assessment', '/patient-assessment'),
           ],
         ),
       ),

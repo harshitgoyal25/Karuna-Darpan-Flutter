@@ -6,11 +6,11 @@ class PatientListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final patients = [
-      {'name': 'Aarjoo Dahiya', 'time': '9:00 AM'},
-      {'name': 'Aanchal Gupta', 'time': '11:00 AM'},
-      {'name': 'Jot Ajmani', 'time': '12:30 PM'},
-      {'name': 'Harish Gupta', 'time': '2:00 PM'},
-      {'name': 'Harshit Goyal', 'time': '5:30 PM'},
+      {'name': 'Aarjoo Dahiya', 'age': '21'},
+      {'name': 'Aanchal Gupta', 'age': '21'},
+      {'name': 'Jot Ajmani', 'age': '21'},
+      {'name': 'Harish Gupta', 'age': '21'},
+      {'name': 'Harshit Goyal', 'age': '21'},
     ];
 
     return Scaffold(
@@ -40,7 +40,7 @@ class PatientListPage extends StatelessWidget {
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               subtitle: Text(
-                p['time']!,
+                p['age']!,
                 style: const TextStyle(color: Colors.grey),
               ),
               trailing: const Icon(Icons.arrow_forward_ios,

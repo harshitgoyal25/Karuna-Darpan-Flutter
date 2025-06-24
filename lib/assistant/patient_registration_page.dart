@@ -5,7 +5,7 @@ class PatientRegistrationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fields = ['District', 'CHC', 'PHC', 'SC', 'Village'];
+    final fields = ['District', 'Block', 'Arogya Mandir', 'Village'];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -54,7 +54,7 @@ class PatientRegistrationPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                 ),
-                child: const Text('Register',
+                child: const Text('Proceed',
                     style: TextStyle(color: Colors.white)),
               ),
             ),

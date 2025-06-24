@@ -10,9 +10,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String selectedRole = 'Assistant';
+  String selectedRole = 'Patient';
 
-  final List<String> roles = ['Assistant', 'Patient', 'Therapist'];
+  final List<String> roles = ['Patient', 'Assistant', 'Therapist'];
 
   @override
   Widget build(BuildContext context) {
@@ -88,15 +88,27 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/create-account'),
-                    child: const Text(
-                      "Don't have an account? Register",
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/create-account'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero, // No rounded corners
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                      ),
+                      child: const Text(
+                        "New Patient Registration",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ],
@@ -174,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleLogin() {
-    if (selectedRole == 'Assistant' || selectedRole == 'Therapist') {
+    if (selectedRole == 'Therapist') {
       Navigator.pushNamed(context, '/assistant');
     } else if (selectedRole == 'Patient') {
       Navigator.pushNamed(context, '/patient-dashboard');

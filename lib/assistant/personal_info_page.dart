@@ -12,10 +12,10 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController abhaController = TextEditingController();
 
   String gender = 'Male';
-  String education = 'Graduate';
+  // String education = 'Graduate';
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +35,13 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTextField('First Name', firstNameController),
-            _buildTextField('Last Name', lastNameController),
+            _buildTextField('Enter Full Name', firstNameController),
+            // _buildTextField('Last Name', lastNameController),
             _buildTextField('Age', ageController,
                 keyboardType: TextInputType.number),
             _buildTextField('Mobile Number', mobileController,
                 keyboardType: TextInputType.phone),
-            _buildTextField('Email ID', emailController,
-                keyboardType: TextInputType.emailAddress),
+            _buildTextField('Abha ID', abhaController),
             const SizedBox(height: 20),
             const Text('Gender', style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 6),
@@ -52,14 +51,14 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               onChanged: (val) => setState(() => gender = val),
             ),
             const SizedBox(height: 20),
-            const Text('Education',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 6),
-            _buildDropdown(
-              value: education,
-              items: ['Graduate', 'Postgraduate', 'Diploma'],
-              onChanged: (val) => setState(() => education = val),
-            ),
+            // // const Text('Education',
+            // //     style: TextStyle(fontWeight: FontWeight.bold)),
+            // const SizedBox(height: 6),
+            // _buildDropdown(
+            //   value: education,
+            //   items: ['Graduate', 'Postgraduate', 'Diploma'],
+            //   onChanged: (val) => setState(() => education = val),
+            // ),
             const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,

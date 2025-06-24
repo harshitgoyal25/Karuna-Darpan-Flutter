@@ -20,7 +20,7 @@ class PatientsPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         children: [
           _buildButton(context, 'Lists', '/patient-list'),
-          _buildButton(context, 'Add New Patient', '/add-patient'),
+          _buildButton(context, 'Add New Patient', '/patient-registration'),
         ],
       ),
     );
