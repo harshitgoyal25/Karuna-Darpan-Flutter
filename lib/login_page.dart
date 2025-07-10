@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +15,35 @@ class _LoginPageState extends State<LoginPage> {
   String selectedRole = 'Patient';
 
   final List<String> roles = ['Patient', 'Assistant', 'Therapist'];
+
+  // 🔄 API CALL FUNCTION
+  Future<void> _fetchPatientsData() async {
+    print("🌐 Starting API call...");
+
+    try {
+      final response = await http.get(
+        Uri.parse('https://karuna-backend.onrender.com/api/patients/getAll'),
+      );
+
+      print("📥 Status Code: ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print("✅ Data fetched successfully:");
+        print(data);
+
+        if (data is List) {
+          for (var patient in data) {
+            print("🧑 Patient: $patient");
+          }
+        }
+      } else {
+        print("❌ Failed to fetch data. Status: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("💥 Error occurred: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,28 +119,41 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/create-account'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero, // No rounded corners
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/create-account'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
-                      ),
-                      child: const Text(
-                        "New Patient Registration",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                        child: const Text(
+                          "New Patient Registration",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
+                      const SizedBox(height: 8),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/fetch-patients');
+                        },
+                        child: const Text(
+                          "Go to Patient List",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -185,14 +229,45 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _handleLogin() {
-    if (selectedRole == 'Therapist') {
-      Navigator.pushNamed(context, '/assistant');
-    } else if (selectedRole == 'Patient') {
-      Navigator.pushNamed(context, '/patient-dashboard');
-    } else {
+  void _handleLogin() async {
+    print("🔐 Login process started...");
+    print("Selected role: $selectedRole");
+    print("Username: ${usernameController.text}");
+    print("Password: ${passwordController.text}");
+
+    print("📡 Sending credentials to server...");
+
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      print("⏳ Waiting for server response...");
+
+      final success = usernameController.text == 'test' &&
+          passwordController.text == '1234';
+
+      await Future.delayed(const Duration(seconds: 1));
+
+      if (success) {
+        print("✅ Login successful!");
+
+        if (selectedRole == 'Therapist') {
+          print("🔁 Redirecting to Therapist Dashboard...");
+          Navigator.pushNamed(context, '/assistant');
+        } else if (selectedRole == 'Patient') {
+          print("🔁 Redirecting to Patient Dashboard...");
+          Navigator.pushNamed(context, '/patient-dashboard');
+        } else {
+          print("❌ No route configured for role: $selectedRole");
+        }
+      } else {
+        print("❌ Invalid credentials. Login failed.");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Login failed: Invalid credentials')),
+        );
+      }
+    } catch (e) {
+      print("💥 Error occurred during login: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Redirect not set for $selectedRole')),
+        const SnackBar(content: Text('An error occurred during login')),
       );
     }
   }

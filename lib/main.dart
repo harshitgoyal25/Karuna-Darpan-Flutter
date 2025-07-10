@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:karuna_darpan/FetchPatientsScreen.dart';
 import 'login_page.dart';
 import 'assistant/assistant_page.dart';
 import 'assistant/patients_page.dart';
@@ -47,6 +48,7 @@ class KarunaDarpanApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Roboto'),
       initialRoute: '/splash',
       routes: {
+         '/fetch-patients': (context) => const FetchPatientsScreen(),
         '/splash': (context) => const SplashScreen(),
         '/': (context) => const LoginPage(),
         '/assistant': (context) => const AssistantPage(),
