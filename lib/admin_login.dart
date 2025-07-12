@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({super.key});
@@ -8,8 +10,50 @@ class AdminLoginPage extends StatefulWidget {
 }
 
 class _AdminLoginPageState extends State<AdminLoginPage> {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> loginAdmin() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      _showMessage("Please fill in all fields");
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:5000/api/admins/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        Navigator.pushNamed(context, '/admin-dashboard');
+      } else {
+        _showMessage(data['message'] ?? 'Login failed');
+      }
+    } catch (e) {
+      _showMessage('Error: ${e.toString()}');
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +76,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.1),
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black12,
                 blurRadius: 12,
@@ -60,33 +104,43 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              _buildTextField("Username", usernameController, false),
+              _buildTextField("Email", emailController, false),
               const SizedBox(height: 16),
               _buildTextField("Password", passwordController, true),
               const SizedBox(height: 12),
-              const Align(
+              Align(
                 alignment: Alignment.centerRight,
-                child: Text(
-                  "Forgot password?",
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/forget_password');
+                  },
+                  child: const Text(
+                    "Forgot password?",
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/admin-dashboard');
-                },
+                onPressed: _isLoading ? null : loginAdmin,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF3E1F99),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 14),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        "Login",
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
               ),
               const SizedBox(height: 20),
               const Text(

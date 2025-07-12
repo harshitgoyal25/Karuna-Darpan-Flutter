@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // ✅ Add this
+import 'package:karuna_darpan/AdminForgetPasswordPage.dart';
 
 import 'package:karuna_darpan/FetchPatientsScreen.dart';
 import 'package:karuna_darpan/patient/add_health_record_page.dart';
@@ -67,7 +68,8 @@ class KarunaDarpanApp extends StatelessWidget {
         '/confirmation-splash': (context) => const ConfirmationSplashPage(),
 
         '/calls': (context) => const CallsPage(),
-        
+        '/forget_password': (context) => const AdminForgetPasswordPage(),
+
         '/learning': (context) => const LearningPage(),
         '/performance': (context) => const PerformancePage(),
         '/patient-list': (context) => const PatientListPage(),

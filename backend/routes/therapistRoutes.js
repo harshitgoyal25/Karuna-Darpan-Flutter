@@ -37,6 +37,31 @@ router.post('/create', async (req, res) => {
   }
 });
 
+// Therapist Login
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const therapist = await Therapist.findOne({ email });
+    if (!therapist) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isMatch = await bcrypt.compare(password, therapist.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const therapistData = therapist.toObject();
+    delete therapistData.password;
+
+    res.json({ message: 'Login successful', therapist: therapistData });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // Get all therapists
 router.get('/getall', async (req, res) => {
   try {

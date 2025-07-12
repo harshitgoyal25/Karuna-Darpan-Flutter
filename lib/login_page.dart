@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: isLoading ? null : _handlePatientLogin,
+                    onPressed: isLoading ? null : _handleLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF3E1F99),
                       padding: const EdgeInsets.symmetric(
@@ -204,9 +204,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _handlePatientLogin() async {
-    if (emailController.text.trim().isEmpty ||
-        passwordController.text.trim().isEmpty) {
+  void _handleLogin() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter both email and password')),
       );
@@ -217,46 +219,62 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
+    String endpoint = '';
+    String redirectRoute = '';
+    String userKey = '';
+
+    switch (selectedRole) {
+      case 'Patient':
+        endpoint = 'http://10.0.2.2:5000/api/patients/login';
+        redirectRoute = '/patient-dashboard';
+        userKey = 'patient';
+        break;
+      case 'Doctor':
+        endpoint = 'http://10.0.2.2:5000/api/therapists/login';
+        redirectRoute = '/patients';
+        userKey = 'therapist';
+        break;
+      case 'Admin':
+        endpoint = 'http://10.0.2.2:5000/api/assistants/login';
+        redirectRoute = '/patients';
+        userKey = 'assistant';
+        break;
+    }
+
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5000/api/patients/login'),
+        Uri.parse(endpoint),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': emailController.text.trim(),
-          'password': passwordController.text.trim(),
-        }),
+        body: jsonEncode({'email': email, 'password': password}),
       );
 
-      print("Login Response: ${response.body}");
+      final data = jsonDecode(response.body);
+      print("Login Response: $data");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = jsonDecode(response.body);
-        final patient = data['patient'];
+        final user = data[userKey];
 
-        if (patient == null || patient['id'] == null) {
+        if (user == null || user['id'] == null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('Login succeeded but patient ID is missing'),
+                content: Text('Login succeeded but user ID is missing'),
                 backgroundColor: Colors.red),
           );
           return;
         }
 
-        final String patientId = patient['id'];
-        final String patientName = patient['name'] ?? 'Patient';
-
         Navigator.pushNamed(
           context,
-          '/patient-dashboard',
-          arguments: {'id': patientId, 'name': patientName},
+          redirectRoute,
+          arguments: {'id': user['id'], 'name': user['name'] ?? 'User'},
         );
       } else {
-        final data = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(
-                  'Login failed: ${data['message'] ?? 'Invalid credentials'}'),
-              backgroundColor: Colors.red),
+            content: Text(
+                'Login failed: ${data['message'] ?? 'Invalid credentials'}'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } catch (e) {

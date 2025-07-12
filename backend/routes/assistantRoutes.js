@@ -34,6 +34,32 @@ router.post('/create', async (req, res) => {
   }
 });
 
+
+// Assistant Login
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const assistant = await Assistant.findOne({ email });
+    if (!assistant) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isMatch = await bcrypt.compare(password, assistant.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const assistantData = assistant.toObject();
+    delete assistantData.password;
+
+    res.json({ message: 'Login successful', assistant: assistantData });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // Get all assistants
 router.get('/getall', async (req, res) => {
   try {
