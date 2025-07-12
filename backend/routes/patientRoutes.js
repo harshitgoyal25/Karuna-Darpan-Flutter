@@ -211,4 +211,33 @@ router.delete("/delete/:id", async (req, res) => {
   }
 })
 
+// @route   POST /api/patients/reset-password
+// @desc    Reset password using email and new password
+router.post("/reset-password", async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+    return res.status(400).json({ message: "Email and new password are required" });
+  }
+
+  try {
+    const patient = await Patient.findOne({ email: email.toLowerCase() });
+
+    if (!patient) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    patient.password = hashedPassword;
+    await patient.save();
+
+    console.log(`🔐 Password reset successful for: ${email}`);
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error("❌ Error resetting password:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
 module.exports = router
