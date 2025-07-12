@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // ✅ Add this
+
 import 'package:karuna_darpan/FetchPatientsScreen.dart';
+import 'package:karuna_darpan/patient/add_health_record_page.dart';
+import 'package:karuna_darpan/patient/faq.dart';
 import 'login_page.dart';
 import 'assistant/assistant_page.dart';
 import 'assistant/patients_page.dart';
@@ -32,10 +36,16 @@ import 'forget_password_page.dart'; // Adjust path if needed
 import 'create_account_page.dart';
 import 'splash_screen.dart';
 import 'confirmation_splash_page.dart';
-import 'patient_health_info_page.dart';
+
 import 'assistant/add_task_page.dart';
 
-void main() => runApp(const KarunaDarpanApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  await dotenv.load(); // ✅ Load .env variables before app runs
+  print("Loaded API key: ${dotenv.env['OPENAI_API_KEY']}");
+  runApp(const KarunaDarpanApp());
+}
 
 class KarunaDarpanApp extends StatelessWidget {
   const KarunaDarpanApp({super.key});
@@ -57,7 +67,7 @@ class KarunaDarpanApp extends StatelessWidget {
         '/confirmation-splash': (context) => const ConfirmationSplashPage(),
 
         '/calls': (context) => const CallsPage(),
-        '/patient-health-info': (context) => const PatientHealthInfoPage(),
+        
         '/learning': (context) => const LearningPage(),
         '/performance': (context) => const PerformancePage(),
         '/patient-list': (context) => const PatientListPage(),
@@ -69,7 +79,19 @@ class KarunaDarpanApp extends StatelessWidget {
         '/patient-dashboard': (context) => const PatientDashboard(),
         '/symptom-tracker': (context) => const SymptomTrackerPage(),
         '/call-for-help': (context) => const CallForHelpPage(),
-        '/health-history': (context) => const HealthHistoryPage(),
+      
+  '/health-history': (context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    return HealthHistoryPage(patientId: args['patientId']);
+  },
+  '/add-health-record': (context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    return AddHealthRecordPage(patientId: args['patientId']);
+  },
+
+
+
+
         '/patient-learning': (context) => const PatientLearningPage(),
         '/chatbot': (context) => const ChatbotPage(),
         '/personal-info': (context) => const PersonalInfoPage(),
@@ -84,6 +106,8 @@ class KarunaDarpanApp extends StatelessWidget {
         '/add-task': (context) => const AddTaskPage(),
         '/forget-password': (context) => const ForgetPasswordPage(),
         '/create-account': (context) => const CreateAccountPage(),
+        '/faq': (context) => const FAQPage(),
+
       },
     );
   }

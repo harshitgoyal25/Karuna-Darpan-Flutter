@@ -6,9 +6,12 @@ class PatientLearningPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final options = [
-      {'title': 'FAQs', 'route': null},
+      {'title': 'FAQs', 'route': '/faq'},
       {'title': 'Chatbot', 'route': '/chatbot'},
-      {'title': 'Videos', 'route': null},
+      {
+        'title': 'Videos',
+        'route': null
+      }, // You can add a route for Videos later
     ];
 
     return Scaffold(
@@ -27,9 +30,11 @@ class PatientLearningPage extends StatelessWidget {
           return Card(
             margin: const EdgeInsets.symmetric(vertical: 8),
             elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: ListTile(
-              title: Text(option['title']!, style: const TextStyle(fontSize: 16)),
+              title:
+                  Text(option['title']!, style: const TextStyle(fontSize: 16)),
               trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 if (option['route'] != null) {

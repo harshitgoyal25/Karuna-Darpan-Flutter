@@ -10,40 +10,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String selectedRole = 'Patient';
+  bool isLoading = false;
 
-  final List<String> roles = ['Patient', 'Assistant', 'Therapist'];
-
-  // 🔄 API CALL FUNCTION
-  Future<void> _fetchPatientsData() async {
-    print("🌐 Starting API call...");
-
-    try {
-      final response = await http.get(
-        Uri.parse('https://karuna-backend.onrender.com/api/patients/getAll'),
-      );
-
-      print("📥 Status Code: ${response.statusCode}");
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        print("✅ Data fetched successfully:");
-        print(data);
-
-        if (data is List) {
-          for (var patient in data) {
-            print("🧑 Patient: $patient");
-          }
-        }
-      } else {
-        print("❌ Failed to fetch data. Status: ${response.statusCode}");
-      }
-    } catch (e) {
-      print("💥 Error occurred: $e");
-    }
-  }
+  String? selectedRole = 'Patient';
+  final List<String> roles = ['Patient', 'Doctor', 'Admin'];
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +44,11 @@ class _LoginPageState extends State<LoginPage> {
                   const CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.white24,
-                    child: Icon(Icons.lock_open, color: Colors.white, size: 40),
+                    child: Icon(Icons.person, color: Colors.white, size: 40),
                   ),
                   const SizedBox(height: 24),
                   const Text(
-                    "LOGIN",
+                    "PATIENT LOGIN",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -85,26 +57,25 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  _buildDropdown(),
-                  const SizedBox(height: 16),
-                  _buildTextField("Username", usernameController, false),
+                  _buildTextField("Email", emailController, false),
                   const SizedBox(height: 16),
                   _buildTextField("Password", passwordController, true),
+                  const SizedBox(height: 16),
+                  _buildRoleDropdown(),
                   const SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () =>
                           Navigator.pushNamed(context, '/forget-password'),
-                      child: const Text(
-                        "Forgot password?",
-                        style: TextStyle(color: Colors.white70, fontSize: 12),
-                      ),
+                      child: const Text("Forgot password?",
+                          style:
+                              TextStyle(color: Colors.white70, fontSize: 12)),
                     ),
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: _handleLogin,
+                    onPressed: isLoading ? null : _handlePatientLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF3E1F99),
                       padding: const EdgeInsets.symmetric(
@@ -113,48 +84,19 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                color: Colors.white, strokeWidth: 2),
+                          )
+                        : const Text("Login",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                   const SizedBox(height: 20),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () =>
-                            Navigator.pushNamed(context, '/create-account'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                        ),
-                        child: const Text(
-                          "New Patient Registration",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const SizedBox(height: 8),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/fetch-patients');
-                        },
-                        child: const Text(
-                          "Go to Patient List",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildRegisterButtons(),
                 ],
               ),
             ),
@@ -194,6 +136,8 @@ class _LoginPageState extends State<LoginPage> {
       child: TextField(
         controller: controller,
         obscureText: obscure,
+        keyboardType:
+            hint == "Email" ? TextInputType.emailAddress : TextInputType.text,
         decoration: InputDecoration(
           hintText: hint,
           border: InputBorder.none,
@@ -202,73 +146,129 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildDropdown() {
-    return DropdownButtonFormField<String>(
-      value: selectedRole,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
+  Widget _buildRoleDropdown() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: selectedRole,
+          isExpanded: true,
+          icon: const Icon(Icons.arrow_drop_down),
+          style: const TextStyle(color: Colors.black),
+          dropdownColor: Colors.white,
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedRole = newValue!;
+            });
+          },
+          items: roles.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
         ),
       ),
-      items: roles.map((role) {
-        return DropdownMenuItem(
-          value: role,
-          child: Text(role),
-        );
-      }).toList(),
-      onChanged: (value) {
-        if (value != null) {
-          setState(() => selectedRole = value);
-        }
-      },
     );
   }
 
-  void _handleLogin() async {
-    print("🔐 Login process started...");
-    print("Selected role: $selectedRole");
-    print("Username: ${usernameController.text}");
-    print("Password: ${passwordController.text}");
+  Widget _buildRegisterButtons() {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () => Navigator.pushNamed(context, '/create-account'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            shape:
+                const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          ),
+          child: const Text(
+            "New Patient Registration",
+            style: TextStyle(
+                color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextButton(
+          onPressed: () => Navigator.pushNamed(context, '/fetch-patients'),
+          child: const Text("View All Patients",
+              style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    );
+  }
 
-    print("📡 Sending credentials to server...");
+  void _handlePatientLogin() async {
+    if (emailController.text.trim().isEmpty ||
+        passwordController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter both email and password')),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
 
     try {
-      await Future.delayed(const Duration(seconds: 2));
-      print("⏳ Waiting for server response...");
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:5000/api/patients/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': emailController.text.trim(),
+          'password': passwordController.text.trim(),
+        }),
+      );
 
-      final success = usernameController.text == 'test' &&
-          passwordController.text == '1234';
+      print("Login Response: ${response.body}");
 
-      await Future.delayed(const Duration(seconds: 1));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        final patient = data['patient'];
 
-      if (success) {
-        print("✅ Login successful!");
-
-        if (selectedRole == 'Therapist') {
-          print("🔁 Redirecting to Therapist Dashboard...");
-          Navigator.pushNamed(context, '/assistant');
-        } else if (selectedRole == 'Patient') {
-          print("🔁 Redirecting to Patient Dashboard...");
-          Navigator.pushNamed(context, '/patient-dashboard');
-        } else {
-          print("❌ No route configured for role: $selectedRole");
+        if (patient == null || patient['id'] == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Login succeeded but patient ID is missing'),
+                backgroundColor: Colors.red),
+          );
+          return;
         }
+
+        final String patientId = patient['id'];
+        final String patientName = patient['name'] ?? 'Patient';
+
+        Navigator.pushNamed(
+          context,
+          '/patient-dashboard',
+          arguments: {'id': patientId, 'name': patientName},
+        );
       } else {
-        print("❌ Invalid credentials. Login failed.");
+        final data = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login failed: Invalid credentials')),
+          SnackBar(
+              content: Text(
+                  'Login failed: ${data['message'] ?? 'Invalid credentials'}'),
+              backgroundColor: Colors.red),
         );
       }
     } catch (e) {
-      print("💥 Error occurred during login: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('An error occurred during login')),
+        const SnackBar(
+            content: Text('Network error. Please check your connection.'),
+            backgroundColor: Colors.red),
       );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }

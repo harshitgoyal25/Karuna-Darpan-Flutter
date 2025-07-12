@@ -16,7 +16,15 @@ const patientSchema = new mongoose.Schema({
   currentproblems: String,
   allergies: String,
   currentmedications: String,
-  assignedTherapist: { type: String, default: 'NA' }
+  assignedTherapist: { type: String, default: 'NA' },
+
+  // ✅ New field: array of health records
+  healthRecords: [
+    {
+      description: { type: String, required: true },
+      createdAt: { type: Date, default: Date.now }
+    }
+  ]
 });
 
 module.exports = mongoose.model('Patient', patientSchema);
