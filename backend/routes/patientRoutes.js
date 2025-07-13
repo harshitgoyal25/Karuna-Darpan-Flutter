@@ -194,22 +194,20 @@ router.put("/update/:id", async (req, res) => {
   }
 })
 
-// @route   DELETE /api/patients/delete/:id
-// @desc    Delete a patient
-router.delete("/delete/:id", async (req, res) => {
+// DELETE /api/patients/:id
+// NEW — correct relative route
+router.delete('/:id', async (req, res) => {
   try {
-    const deleted = await Patient.findByIdAndDelete(req.params.id)
-    if (!deleted) {
-      return res.status(404).json({ message: "Patient not found" })
+    const result = await Patient.findByIdAndDelete(req.params.id);
+    if (!result) {
+      return res.status(404).json({ error: 'Patient not found' });
     }
-
-    console.log("🗑️ Patient deleted successfully")
-    res.json({ message: "Patient deleted successfully" })
+    res.json({ message: 'Patient deleted successfully' });
   } catch (err) {
-    console.error("❌ Error deleting patient:", err)
-    res.status(500).json({ error: err.message })
+    res.status(500).json({ error: 'Server error' });
   }
-})
+});
+
 
 // @route   POST /api/patients/reset-password
 // @desc    Reset password using email and new password

@@ -15,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
 
   String? selectedRole = 'Patient';
-  final List<String> roles = ['Patient', 'Doctor', 'Admin'];
+  final List<String> roles = ['Patient', 'Therapist', 'Assistant'];
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 24),
                   const Text(
-                    "PATIENT LOGIN",
+                    "LOGIN",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -229,14 +229,14 @@ class _LoginPageState extends State<LoginPage> {
         redirectRoute = '/patient-dashboard';
         userKey = 'patient';
         break;
-      case 'Doctor':
+      case 'Therapist':
         endpoint = 'http://10.0.2.2:5000/api/therapists/login';
-        redirectRoute = '/patients';
+        redirectRoute = '/assistant';
         userKey = 'therapist';
         break;
-      case 'Admin':
+      case 'Assistant':
         endpoint = 'http://10.0.2.2:5000/api/assistants/login';
-        redirectRoute = '/patients';
+        redirectRoute = '/assistant';
         userKey = 'assistant';
         break;
     }

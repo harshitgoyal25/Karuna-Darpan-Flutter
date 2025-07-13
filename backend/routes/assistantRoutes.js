@@ -53,6 +53,9 @@ router.post('/login', async (req, res) => {
     const assistantData = assistant.toObject();
     delete assistantData.password;
 
+    // ✅ Add this line to rename _id to id
+    assistantData.id = assistant._id;
+
     res.json({ message: 'Login successful', assistant: assistantData });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -107,5 +110,30 @@ router.delete('/delete/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Reset assistant password
+router.post('/reset-password', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+    return res.status(400).json({ message: 'Email and new password are required' });
+  }
+
+  try {
+    const assistant = await Assistant.findOne({ email });
+    if (!assistant) {
+      return res.status(404).json({ message: 'Assistant not found' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    assistant.password = hashedPassword;
+    await assistant.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;

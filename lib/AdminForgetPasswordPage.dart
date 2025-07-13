@@ -37,8 +37,13 @@ class _AdminForgetPasswordPageState extends State<AdminForgetPasswordPage> {
       if (response.statusCode == 200) {
         message = "Password reset successful. You can now login.";
       } else {
-        message = json.decode(response.body)['message'] ??
-            'Failed to reset password.';
+        if (response.headers['content-type']?.contains('application/json') ==
+            true) {
+          final data = json.decode(response.body);
+          message = data['message'] ?? 'Failed to reset password.';
+        } else {
+          message = 'Server error: ${response.statusCode}';
+        }
       }
     });
   }

@@ -114,4 +114,30 @@ router.delete('/delete/:id', async (req, res) => {
   }
 });
 
+// Reset admin password
+router.post('/forgot-password', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+    return res.status(400).json({ message: 'Email and new password are required' });
+  }
+
+  try {
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    admin.password = hashedPassword;
+
+    await admin.save();
+
+    res.status(200).json({ message: 'Password reset successful. You can now login.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 module.exports = router;

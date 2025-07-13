@@ -2,21 +2,41 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class ForgetPasswordPage extends StatelessWidget {
+class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key});
+
+  @override
+  State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
+}
+
+class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+
+  String selectedRole = 'Patient';
+  final List<String> roles = ['Patient', 'Therapist', 'Assistant'];
 
   Future<void> resetPassword(
       BuildContext context, String email, String newPassword) async {
-    const apiUrl = 'http://10.0.2.2:5000/api/patients/reset-password';
+    String apiUrl = '';
+
+    switch (selectedRole) {
+      case 'Patient':
+        apiUrl = 'http://10.0.2.2:5000/api/patients/reset-password';
+        break;
+      case 'Therapist':
+        apiUrl = 'http://10.0.2.2:5000/api/therapists/reset-password';
+        break;
+      case 'Assistant':
+        apiUrl = 'http://10.0.2.2:5000/api/assistants/reset-password';
+        break;
+    }
 
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'newPassword': newPassword,
-        }),
+        body: jsonEncode({'email': email, 'newPassword': newPassword}),
       );
 
       if (response.statusCode == 200) {
@@ -39,9 +59,6 @@ class ForgetPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController newPasswordController = TextEditingController();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -60,6 +77,31 @@ class ForgetPasswordPage extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
+
+            // Role Dropdown
+            DropdownButtonFormField<String>(
+              value: selectedRole,
+              decoration: InputDecoration(
+                labelText: 'Role',
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              items: roles.map((role) {
+                return DropdownMenuItem<String>(
+                  value: role,
+                  child: Text(role),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedRole = value!;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
@@ -72,6 +114,7 @@ class ForgetPasswordPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+
             TextField(
               controller: newPasswordController,
               obscureText: true,
@@ -84,6 +127,7 @@ class ForgetPasswordPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
+
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF3E1F99),
@@ -95,9 +139,7 @@ class ForgetPasswordPage extends StatelessWidget {
 
                 if (email.isEmpty || newPassword.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill in all fields'),
-                    ),
+                    const SnackBar(content: Text('Please fill in all fields')),
                   );
                 } else {
                   resetPassword(context, email, newPassword);

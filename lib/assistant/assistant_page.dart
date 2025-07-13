@@ -21,7 +21,7 @@ class AssistantPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
         children: [
           _buildButton(context, '🧑‍⚕️ Patients', '/patients'),
-          _buildButton(context, '✅ Today’s Visit', '/tasks'),
+          _buildButton(context, '✅ Today’s Visit', '/visit'),
           _buildButton(context, '📞 Call', '/calls'),
           _buildButton(context, '🧠 Learning', '/learning'),
           _buildButton(context, '📈 My Performance', '/performance'),

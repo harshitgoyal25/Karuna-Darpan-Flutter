@@ -1,24 +1,31 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-
 const router = express.Router();
 const Therapist = require('../models/Therapist');
 
 // Create therapist
 router.post('/create', async (req, res) => {
-  const {
-    therapistId, email, name, city, expertise, password, assignedPatients
-  } = req.body;
-
   try {
+    const {
+      therapistId,
+      email,
+      name,
+      city,
+      expertise,
+      password,
+      assignedPatients = []
+    } = req.body;
+
     if (!therapistId || !email || !city || !password || !name) {
       return res.status(400).json({ error: 'therapistId, email, name, city, and password are required' });
     }
 
-    const existing = await Therapist.findOne({ email });
-    if (existing) return res.status(400).json({ message: 'Therapist already exists' });
+    const existing = await Therapist.findOne({ email }).lean();
+    if (existing) {
+      return res.status(400).json({ message: 'Therapist already exists' });
+    }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 8); // use saltRounds = 8 for faster hashing
 
     const newTherapist = new Therapist({
       therapistId,
@@ -31,35 +38,56 @@ router.post('/create', async (req, res) => {
     });
 
     await newTherapist.save();
-    res.status(201).json({ message: 'Therapist created', therapist: newTherapist });
+
+    // Send response without password
+    const responseTherapist = newTherapist.toObject();
+    delete responseTherapist.password;
+
+    res.status(201).json({
+      message: 'Therapist created',
+      therapist: responseTherapist
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error in therapist creation:', err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
+
 // Therapist Login
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    const therapist = await Therapist.findOne({ email });
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const therapist = await Therapist.findOne({ email }).lean();
     if (!therapist) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      return res.status(401).json({ message: 'Invalid email' });
     }
 
     const isMatch = await bcrypt.compare(password, therapist.password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
-    const therapistData = therapist.toObject();
-    delete therapistData.password;
+    const { _id, password: _, ...rest } = therapist;
 
-    res.json({ message: 'Login successful', therapist: therapistData });
+    res.status(200).json({
+      message: 'Login successful',
+      therapist: {
+        id: _id,       // ✅ Flutter expects 'id'
+        ...rest
+      }
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error in therapist login:', err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 
 // Get all therapists
@@ -111,5 +139,29 @@ router.delete('/delete/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Therapist Reset Password
+router.post('/reset-password', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    const therapist = await Therapist.findOne({ email });
+    if (!therapist) {
+      return res.status(404).json({ error: 'Therapist not found' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    therapist.password = hashedPassword;
+
+    await therapist.save();
+
+    res.json({ message: 'Password reset successful' });
+  } catch (err) {
+    console.error('Error resetting therapist password:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 
 module.exports = router;
