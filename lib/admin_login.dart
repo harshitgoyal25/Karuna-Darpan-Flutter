@@ -27,7 +27,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://karuna-backend.onrender.com/api/admins/login'),
+        Uri.parse('http://10.0.2.2:5000/api/admins/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}),
       );
@@ -35,7 +35,6 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        _showMessage("Login successful");
         Navigator.pushNamed(context, '/admin-dashboard');
       } else {
         _showMessage(data['message'] ?? 'Login failed');

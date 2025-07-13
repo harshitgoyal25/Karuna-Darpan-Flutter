@@ -44,23 +44,32 @@ router.post("/create", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10)
 
     // Create new patient
-    const newPatient = new Patient({
-      abhaId,
-      email,
-      name,
-      age: age || 0,
-      phone,
-      password: hashedPassword,
-      gender,
-      aadhar,
-      village,
-      state,
-      district,
-      medicalHistory: medicalHistory || "",
-      currentproblems: currentproblems || "",
-      allergies: allergies || "",
-      currentmedications: currentmedications || "",
-    })
+    const now = new Date();
+
+const newPatient = new Patient({
+  abhaId,
+  email,
+  name,
+  age: age || 0,
+  phone,
+  password: hashedPassword,
+  gender,
+  aadhar,
+  village,
+  state,
+  district,
+  medicalHistory: medicalHistory || "",
+  currentproblems: currentproblems || "",
+  allergies: allergies || "",
+  currentmedications: currentmedications || "",
+  healthRecords: [
+    { description: `Medical History: ${medicalHistory || "N/A"}`, createdAt: now },
+    { description: `Current Problems: ${currentproblems || "N/A"}`, createdAt: now },
+    { description: `Allergies: ${allergies || "N/A"}`, createdAt: now },
+    { description: `Current Medications: ${currentmedications || "N/A"}`, createdAt: now }
+  ]
+});
+
 
     await newPatient.save()
     console.log("✅ Patient created successfully:", newPatient._id)
@@ -196,7 +205,7 @@ router.put("/update/:id", async (req, res) => {
 
 // DELETE /api/patients/:id
 // NEW — correct relative route
-router.delete('/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
   try {
     const result = await Patient.findByIdAndDelete(req.params.id);
     if (!result) {
