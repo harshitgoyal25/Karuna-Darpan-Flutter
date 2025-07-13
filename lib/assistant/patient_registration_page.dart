@@ -27,7 +27,8 @@ class _PatientRegistrationPageState extends State<PatientRegistrationPage> {
   String gender = 'Male';
 
   Future<void> registerPatient() async {
-    final url = Uri.parse('http://10.0.2.2:5000/api/patients/create');
+    final url =
+        Uri.parse('https://karuna-backend.onrender.com/api/patients/create');
 
     final name = nameController.text.trim();
     final mobile = mobileController.text.trim();

@@ -21,7 +21,8 @@ class _PatientListPageState extends State<PatientListPage> {
   }
 
   Future<void> fetchPatients() async {
-    const String apiUrl = 'http://10.0.2.2:5000/api/patients/getAll';
+    const String apiUrl =
+        'https://karuna-backend.onrender.com/api/patients/getAll';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -80,19 +81,19 @@ class _PatientListPageState extends State<PatientListPage> {
                     trailing: const Icon(Icons.arrow_forward_ios,
                         color: Colors.grey, size: 18),
                     onTap: () async {
-  final result = await Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => PatientDetailPage(patient: patients[index]),
-    ),
-  );
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PatientDetailPage(patient: patients[index]),
+                        ),
+                      );
 
-  // If the patient was marked as treated, refresh the list
-  if (result == true) {
-    fetchPatients();
-  }
-},
-
+                      // If the patient was marked as treated, refresh the list
+                      if (result == true) {
+                        fetchPatients();
+                      }
+                    },
                   ),
                 );
               },

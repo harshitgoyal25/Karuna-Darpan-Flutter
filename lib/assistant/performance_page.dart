@@ -23,8 +23,8 @@ class _PerformancePageState extends State<PerformancePage> {
 
   Future<void> fetchPerformanceStats() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:5000/api/performance'));
+      final response = await http.get(
+          Uri.parse('https://karuna-backend.onrender.com/api/performance'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);

@@ -15,7 +15,7 @@ class _VisitEntryPageState extends State<VisitEntryPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
 
-  final String baseUrl = 'http://10.0.2.2:5000/api/visits';
+  final String baseUrl = 'https://karuna-backend.onrender.com/api/visits';
 
   @override
   void initState() {

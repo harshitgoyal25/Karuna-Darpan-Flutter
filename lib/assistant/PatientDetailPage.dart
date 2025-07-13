@@ -25,7 +25,8 @@ class _PatientDetailPageState extends State<PatientDetailPage> {
 
   Future<void> fetchPatientById() async {
     final patientId = patient['_id'];
-    final url = Uri.parse('http://10.0.2.2:5000/api/patients/$patientId');
+    final url = Uri.parse(
+        'https://karuna-backend.onrender.com/api/patients/$patientId');
 
     try {
       final response = await http.get(url);
@@ -51,7 +52,8 @@ class _PatientDetailPageState extends State<PatientDetailPage> {
 
   Future<void> markAsTreated() async {
     final patientId = patient['_id'];
-    final url = Uri.parse('http://10.0.2.2:5000/api/patients/$patientId');
+    final url = Uri.parse(
+        'https://karuna-backend.onrender.com/api/patients/$patientId');
 
     try {
       final response = await http.delete(url);

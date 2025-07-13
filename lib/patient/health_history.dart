@@ -22,13 +22,15 @@ class _HealthHistoryPageState extends State<HealthHistoryPage> {
   }
 
   Future<void> fetchHealthRecords() async {
-    final res = await http.get(Uri.parse('http://10.0.2.2:5000/api/patients/${widget.patientId}'));
+    final res = await http.get(Uri.parse(
+        'https://karuna-backend.onrender.com/api/patients/${widget.patientId}'));
 
     if (res.statusCode == 200) {
       final data = json.decode(res.body);
       final List<dynamic> fetchedRecords = data['healthRecords'] ?? [];
 
-      fetchedRecords.sort((a, b) => DateTime.parse(b['createdAt']).compareTo(DateTime.parse(a['createdAt'])));
+      fetchedRecords.sort((a, b) => DateTime.parse(b['createdAt'])
+          .compareTo(DateTime.parse(a['createdAt'])));
 
       setState(() {
         records = fetchedRecords;
@@ -68,7 +70,9 @@ class _HealthHistoryPageState extends State<HealthHistoryPage> {
                       child: ListTile(
                         title: Text(record['description']),
                         subtitle: Text(
-                          DateTime.parse(record['createdAt']).toLocal().toString(),
+                          DateTime.parse(record['createdAt'])
+                              .toLocal()
+                              .toString(),
                           style: const TextStyle(fontSize: 12),
                         ),
                       ),

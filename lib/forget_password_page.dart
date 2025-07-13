@@ -22,13 +22,16 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
 
     switch (selectedRole) {
       case 'Patient':
-        apiUrl = 'http://10.0.2.2:5000/api/patients/reset-password';
+        apiUrl =
+            'https://karuna-backend.onrender.com/api/patients/reset-password';
         break;
       case 'Therapist':
-        apiUrl = 'http://10.0.2.2:5000/api/therapists/reset-password';
+        apiUrl =
+            'https://karuna-backend.onrender.com/api/therapists/reset-password';
         break;
       case 'Assistant':
-        apiUrl = 'http://10.0.2.2:5000/api/assistants/reset-password';
+        apiUrl =
+            'https://karuna-backend.onrender.com/api/assistants/reset-password';
         break;
     }
 

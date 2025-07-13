@@ -24,7 +24,8 @@ class _AdminForgetPasswordPageState extends State<AdminForgetPasswordPage> {
     });
 
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:5000/api/admins/forgot-password'),
+      Uri.parse(
+          'https://karuna-backend.onrender.com/api/admins/forgot-password'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'email': emailController.text.trim(),

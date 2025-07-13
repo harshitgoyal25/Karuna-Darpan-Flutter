@@ -27,7 +27,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5000/api/admins/login'),
+        Uri.parse('https://karuna-backend.onrender.com/api/admins/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}),
       );

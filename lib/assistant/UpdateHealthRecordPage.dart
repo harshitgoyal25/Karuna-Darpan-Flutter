@@ -33,7 +33,7 @@ class _UpdateHealthRecordPageState extends State<UpdateHealthRecordPage> {
 
   Future<void> updateHealthRecord() async {
     final url = Uri.parse(
-        'http://10.0.2.2:5000/api/patients/update/${widget.patient['_id']}');
+        'https://karuna-backend.onrender.com/api/patients/update/${widget.patient['_id']}');
 
     final body = jsonEncode({
       "medicalHistory": medicalHistoryController.text,

@@ -26,7 +26,8 @@ class _AddHealthRecordPageState extends State<AddHealthRecordPage> {
   Future<void> _fetchHealthRecords() async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:5000/api/patients/${widget.patientId}'),
+        Uri.parse(
+            'https://karuna-backend.onrender.com/api/patients/${widget.patientId}'),
       );
 
       if (response.statusCode == 200) {
@@ -63,7 +64,8 @@ class _AddHealthRecordPageState extends State<AddHealthRecordPage> {
     };
 
     final response = await http.put(
-      Uri.parse('http://10.0.2.2:5000/api/patients/update/${widget.patientId}'),
+      Uri.parse(
+          'https://karuna-backend.onrender.com/api/patients/update/${widget.patientId}'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         r'$push': {'healthRecords': newRecord}

@@ -182,7 +182,7 @@ class _PatientHealthInfoPageState extends State<PatientHealthInfoPage> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:5000/api/patients/update/${widget.patientData!['id']}'),
+            'https://karuna-backend.onrender.com/api/patients/update/${widget.patientData!['id']}'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'medicalHistory': medicalHistoryController.text.trim(),

@@ -26,7 +26,7 @@ class _FetchPatientsScreenState extends State<FetchPatientsScreen> {
     print("🌐 Sending GET request...");
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:5000/api/patients/getAll'),
+        Uri.parse('https://karuna-backend.onrender.com/api/patients/getAll'),
       );
 
       print("📥 Status Code: ${response.statusCode}");

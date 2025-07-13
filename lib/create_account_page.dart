@@ -178,7 +178,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5000/api/patients/create'),
+        Uri.parse('https://karuna-backend.onrender.com/api/patients/create'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'name': nameController.text.trim(),

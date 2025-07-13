@@ -225,17 +225,17 @@ class _LoginPageState extends State<LoginPage> {
 
     switch (selectedRole) {
       case 'Patient':
-        endpoint = 'http://10.0.2.2:5000/api/patients/login';
+        endpoint = 'https://karuna-backend.onrender.com/api/patients/login';
         redirectRoute = '/patient-dashboard';
         userKey = 'patient';
         break;
       case 'Therapist':
-        endpoint = 'http://10.0.2.2:5000/api/therapists/login';
+        endpoint = 'https://karuna-backend.onrender.com/api/therapists/login';
         redirectRoute = '/assistant';
         userKey = 'therapist';
         break;
       case 'Assistant':
-        endpoint = 'http://10.0.2.2:5000/api/assistants/login';
+        endpoint = 'https://karuna-backend.onrender.com/api/assistants/login';
         redirectRoute = '/assistant';
         userKey = 'assistant';
         break;
@@ -254,7 +254,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final user = data[userKey];
 
-        if (user == null || user['id'] == null) {
+        if (user == null || user['_id'] == null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
                 content: Text('Login succeeded but user ID is missing'),
@@ -266,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushNamed(
           context,
           redirectRoute,
-          arguments: {'id': user['id'], 'name': user['name'] ?? 'User'},
+          arguments: {'id': user['_id'], 'name': user['name'] ?? 'User'},
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -278,6 +278,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } catch (e) {
+      print("Login error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text('Network error. Please check your connection.'),
