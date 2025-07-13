@@ -87,6 +87,29 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Admin login
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const admin = await Admin.findOne({ username });
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Optional: Send token or admin ID
+    res.status(200).json({ message: 'Login successful', adminId: admin._id });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
 // Update admin
 router.put('/:id', async (req, res) => {
   try {
