@@ -94,40 +94,40 @@ const newPatient = new Patient({
 // @route   POST /api/patients/login
 // @desc    Login patient
 router.post("/login", async (req, res) => {
-  console.log("🔐 Login attempt received for:", req.body.email)
+  console.log("🔐 Login attempt received for:", req.body.email);
 
-  const { email, password } = req.body
+  const { email, password } = req.body;
 
   try {
     // Validate input
     if (!email || !password) {
-      console.log("❌ Missing email or password")
-      return res.status(400).json({ message: "Email and password are required" })
+      console.log("❌ Missing email or password");
+      return res.status(400).json({ message: "Email and password are required" });
     }
 
     // Find patient by email
-    const patient = await Patient.findOne({ email: email.toLowerCase() })
+    const patient = await Patient.findOne({ email: email.toLowerCase() });
     if (!patient) {
-      console.log("❌ Patient not found with email:", email)
-      return res.status(400).json({ message: "Invalid email or password" })
+      console.log("❌ Patient not found with email:", email);
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    console.log("👤 Patient found:", patient.name)
+    console.log("👤 Patient found:", patient.name);
 
     // Check password
-    const isMatch = await bcrypt.compare(password, patient.password)
+    const isMatch = await bcrypt.compare(password, patient.password);
     if (!isMatch) {
-      console.log("❌ Password mismatch for email:", email)
-      return res.status(400).json({ message: "Invalid email or password" })
+      console.log("❌ Password mismatch for email:", email);
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    console.log("✅ Login successful for:", email)
+    console.log("✅ Login successful for:", email);
 
-    // Return success with patient info (excluding password)
+    // Return success with patient info (with _id instead of id)
     res.status(200).json({
       message: "Login successful",
       patient: {
-        id: patient._id,
+        _id: patient._id, // 👈 FIXED: was `id`, now `_id`
         name: patient.name,
         email: patient.email,
         abhaId: patient.abhaId,
@@ -138,12 +138,13 @@ router.post("/login", async (req, res) => {
         district: patient.district,
         state: patient.state,
       },
-    })
+    });
   } catch (err) {
-    console.error("💥 Login error:", err)
-    res.status(500).json({ error: "Internal server error" })
+    console.error("💥 Login error:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
-})
+});
+
 
 // @route   GET /api/patients/getAll
 // @desc    Get all patients

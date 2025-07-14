@@ -194,12 +194,6 @@ class _LoginPageState extends State<LoginPage> {
             textAlign: TextAlign.center,
           ),
         ),
-        const SizedBox(height: 8),
-        TextButton(
-          onPressed: () => Navigator.pushNamed(context, '/fetch-patients'),
-          child: const Text("View All Patients",
-              style: TextStyle(color: Colors.white)),
-        ),
       ],
     );
   }
@@ -252,22 +246,39 @@ class _LoginPageState extends State<LoginPage> {
       print("Login Response: $data");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final user = data[userKey];
+        final user = data[userKey] ?? {};
+        final userId = user['_id'] ?? user['id']; // fallback if _id is missing
 
-        if (user == null || user['_id'] == null) {
+        print(" User object: $user");
+        print(" Extracted user ID: $userId");
+
+        if (userId == null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-                content: Text('Login succeeded but user ID is missing'),
-                backgroundColor: Colors.red),
+              content: Text('Login succeeded but user ID is missing'),
+              backgroundColor: Colors.red,
+            ),
           );
           return;
         }
 
+// Continue to dashboard
         Navigator.pushNamed(
           context,
           redirectRoute,
-          arguments: {'id': user['_id'], 'name': user['name'] ?? 'User'},
+          arguments: {'id': userId, 'name': user['name'] ?? 'User'},
         );
+
+        Navigator.pushNamed(
+  context,
+  redirectRoute,
+  arguments: {
+    'id': user['_id'], // for dashboard
+    'name': user['name'] ?? 'User',
+    'patientId': user['_id'], // for health history navigation
+  },
+);
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

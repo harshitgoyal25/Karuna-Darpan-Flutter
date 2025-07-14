@@ -213,10 +213,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           ),
         );
 
+        final patient = data['patient'];
         Navigator.pushNamedAndRemoveUntil(
           context,
-          '/confirmation-splash',
+          '/patient-dashboard',
           (route) => false,
+          arguments: {
+            'id': patient['_id'], // for dashboard
+            'name': patient['name'], // for greeting
+            'patientId':
+                patient['_id'], // for health-history and medical routes
+          },
         );
       } else {
         final data = jsonDecode(response.body);

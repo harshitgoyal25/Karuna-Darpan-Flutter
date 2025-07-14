@@ -8,7 +8,8 @@ class PatientDashboard extends StatelessWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
     final String patientName = args?['name'] ?? 'Patient';
-    final String? patientId = args?['id']; // Get patient ID
+    final String? patientId =
+        args?['patientId'] ?? args?['id']; // ✅ fallback added
 
     final List<Map<String, dynamic>> otherButtons = [
       {'title': 'Symptom Tracker', 'route': '/symptom-tracker'},

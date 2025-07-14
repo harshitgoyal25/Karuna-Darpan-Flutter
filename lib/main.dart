@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // ✅ Add this
 import 'package:karuna_darpan/AdminForgetPasswordPage.dart';
 
-import 'package:karuna_darpan/FetchPatientsScreen.dart';
 import 'package:karuna_darpan/patient/add_health_record_page.dart';
 import 'package:karuna_darpan/patient/faq.dart';
 import 'login_page.dart';
@@ -36,7 +35,6 @@ import 'forget_password_page.dart'; // Adjust path if needed
 import 'create_account_page.dart';
 import 'splash_screen.dart';
 import 'confirmation_splash_page.dart';
-import 'assistant/PatientDetailPage.dart';
 import 'assistant/add_task_page.dart';
 
 Future<void> main() async {
@@ -58,7 +56,6 @@ class KarunaDarpanApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Roboto'),
       initialRoute: '/splash',
       routes: {
-        '/fetch-patients': (context) => const FetchPatientsScreen(),
         '/splash': (context) => const SplashScreen(),
         '/': (context) => const LoginPage(),
         '/assistant': (context) => const AssistantPage(),
@@ -76,7 +73,19 @@ class KarunaDarpanApp extends StatelessWidget {
         '/symptom-tracker': (context) => const SymptomTrackerPage(),
         '/call-for-help': (context) => const CallForHelpPage(),
         '/health-history': (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map;
+          final args = ModalRoute.of(context)!.settings.arguments;
+
+          if (args == null || args is! Map || args['patientId'] == null) {
+            return const Scaffold(
+              body: Center(
+                child: Text(
+                  '❌ Invalid or missing arguments for Health History Page',
+                  style: TextStyle(fontSize: 16, color: Colors.red),
+                ),
+              ),
+            );
+          }
+
           return HealthHistoryPage(patientId: args['patientId']);
         },
         '/add-health-record': (context) {
